@@ -1,0 +1,27 @@
+<div class="register-box">
+  <h2>Profil vervollständigen</h2>
+  <p>Du bist als <strong>{{ role }}</strong> registriert.</p>
+
+  <div class="field">
+    <input type="text" [(ngModel)]="vorname" placeholder="Vorname">
+  </div>
+  <div class="field">
+    <input type="text" [(ngModel)]="nachname" placeholder="Nachname">
+  </div>
+
+  @if (role === 'schueler') {
+    <div class="field">
+      <input type="text" [(ngModel)]="klasse" placeholder="Klasse (z.B. 4AHITM)">
+    </div>
+  } @else {
+    <div class="field">
+      <input type="text" [(ngModel)]="fach" placeholder="Unterrichtsfach">
+    </div>
+  }
+
+  <div class="field">
+    <textarea [(ngModel)]="bio" placeholder="Erzähle etwas über dich..."></textarea>
+  </div>
+
+  <button (click)="saveProfile()">Profil speichern</button>
+</div>

@@ -1,1 +1,23 @@
-<p>register works!</p>
+<div class="register-box">
+  <h2>Account erstellen</h2>
+
+  <div class="field">
+    <label>E-Mail</label>
+    <input type="email" [(ngModel)]="email" placeholder="beispiel@htl-donaustadt.at">
+  </div>
+
+  <div class="field">
+    <label>Passwort</label>
+    <input type="password" [(ngModel)]="password" placeholder="Passwort wählen">
+  </div>
+
+  <div class="field">
+    <label>Ich bin:</label>
+    <select [(ngModel)]="role">
+      <option value="schueler">Schüler/in</option>
+      <option value="lehrer">Lehrer/in</option>
+    </select>
+  </div>
+
+  <button (click)="goToStepTwo()">Weiter zum Profil</button>
+</div>
