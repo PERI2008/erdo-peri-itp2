@@ -1,0 +1,27 @@
+<div class="register-box">
+  <h2>Lehrer-Detailseite</h2>
+
+  @if (profil && profil.role === 'lehrer') {
+    <div class="profile-card" style="text-align: center;">
+      @if (profil.profilbild) {
+        <img [src]="profil.profilbild" alt="Profilbild" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #28a745;">
+      } @else {
+        <div style="width: 150px; height: 150px; border-radius: 50%; background: #ccc; line-height: 150px; margin: 0 auto 15px auto;">Kein Bild</div>
+      }
+
+      <h3>Prof. {{ profil.vorname }} {{ profil.nachname }}</h3>
+      <p><strong>Unterrichtsfach:</strong> {{ profil.fach }}</p>
+      <p><strong>Raum:</strong> {{ profil.raum }}</p>
+
+      @if (profil.istKlassenvorstand) {
+        <p style="color: green; font-weight: bold;">KV ✅ (Ist Klassenvorstand)</p>
+      }
+
+      <p><strong>Über mich:</strong> {{ profil.bio || 'Keine Biografie vorhanden.' }}</p>
+    </div>
+  } @else {
+    <p style="color: red;">Kein Lehrerprofil im Speicher gefunden. Bitte zuerst eines erstellen!</p>
+  }
+
+  <button (click)="zurueck()" style="margin-top: 20px;">Zurück zum Setup</button>
+</div>
