@@ -14,40 +14,89 @@ export class ProfileSetupComponent implements OnInit {
   vorname = '';
   nachname = '';
 
-  // Schüler-spezifische Felder (EPIP-9)
+  // Variable für das Profilbild als Base64-String
+  profilbild = '';
+
+  // Schüler-Felder
   klasse = '';
   geburtsdatum = '';
 
-  // Lehrer-spezifische Felder (EPIP-10)
+  // Lehrer-Felder
   fach = '';
   raum = '';
   istKlassenvorstand = false;
 
-  // Allgemeines Feld
+  // Gemeinsames Feld
   bio = '';
 
+  // Konstruktor ist jetzt leer – kein Service nötig!
+  constructor() {}
+
   ngOnInit() {
-    // Daten aus der Registrierung laden
     this.role = localStorage.getItem('userRole') || 'schueler';
     this.vorname = localStorage.getItem('registeredVorname') || '';
     this.nachname = localStorage.getItem('registeredNachname') || '';
   }
 
+  // Funktion, die aufgerufen wird, wenn ein Bild ausgewählt wird
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      // Wenn der Reader fertig geladen hat, speichern wir das Ergebnis
+      reader.onload = () => {
+        this.profilbild = reader.result as string;
+      };
+
+      // Datei als DataURL einlesen (wird zu einem Base64-String)
+      reader.readAsDataURL(file);
+    }
+  }
+
   saveProfile() {
-    // Validierung je nach Rolle
     if (this.role === 'schueler') {
       if (!this.klasse.trim() || !this.geburtsdatum) {
         alert('Bitte trage deine Klasse und dein Geburtsdatum ein! ❌');
         return;
       }
+
+      // Temporäre Speicherung im localStorage für die Zwischen-Präsentation
+      const schuelerProfil = {
+        role: 'schueler',
+        vorname: this.vorname,
+        nachname: this.nachname,
+        klasse: this.klasse,
+        geburtsdatum: this.geburtsdatum,
+        bio: this.bio,
+        profilbild: this.profilbild
+      };
+
+      localStorage.setItem('savedProfile', JSON.stringify(schuelerProfil));
+      console.log('Schülerprofil lokal gesichert:', schuelerProfil);
+
     } else {
       if (!this.fach.trim() || !this.raum.trim()) {
         alert('Bitte trage dein Unterrichtsfach und deinen Raum ein! ❌');
         return;
       }
+
+      // Temporäre Speicherung im localStorage für die Zwischen-Präsentation
+      const lehrerProfil = {
+        role: 'lehrer',
+        vorname: this.vorname,
+        nachname: this.nachname,
+        fach: this.fach,
+        raum: this.raum,
+        istKlassenvorstand: this.istKlassenvorstand,
+        bio: this.bio,
+        profilbild: this.profilbild
+      };
+
+      localStorage.setItem('savedProfile', JSON.stringify(lehrerProfil));
+      console.log('Lehrerprofil lokal gesichert:', lehrerProfil);
     }
 
-    // Wenn alles passt, Bestätigung ausgeben
-    alert('Profil für ' + this.vorname + ' ' + this.nachname + ' wurde erfolgreich ausgefüllt! ✅');
+    alert('Profil für ' + this.vorname + ' ' + this.nachname + ' wurde erfolgreich gespeichert! ✅');
   }
 }

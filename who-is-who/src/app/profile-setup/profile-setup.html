@@ -5,6 +5,19 @@
 
   <hr>
 
+  <div class="field">
+    <label>Profilbild hochladen</label>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">
+
+    @if (profilbild) {
+      <div style="margin-top: 10px;">
+        <img [src]="profilbild" alt="Vorschau" style="max-width: 120px; max-height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc;">
+      </div>
+    }
+  </div>
+
+  <hr>
+
   @if (role === 'schueler') {
     <div class="field">
       <label>Klasse (z.B. 4AHITM)</label>
