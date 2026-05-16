@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,17 +15,23 @@ export class LoginComponent {
   password = '';
   message = '';
 
+  constructor(private router: Router) {}
+
   checkLogin() {
-    // Daten aus dem Speicher holen
+    // Die Zugangsdaten aus dem Speicher holen
     const savedEmail = localStorage.getItem('registeredEmail');
     const savedPassword = localStorage.getItem('registeredPassword');
 
-    // Prüfen, ob die Eingabe mit der Registrierung übereinstimmt
-    if (this.email === savedEmail && this.password === savedPassword) {
+    // Abgleich der E-Mail und des Passworts
+    if (this.email.trim() === savedEmail && this.password === savedPassword) {
       this.message = 'Login erfolgreich! ✅';
-      // Hier könntest du jetzt zur Personenliste weiterleiten
+
+      // Automatische Weiterleitung nach 1 Sekunde
+      setTimeout(() => {
+        this.router.navigate(['/profile-setup']);
+      }, 1000);
     } else {
-      this.message = 'Falsche E-Mail oder Passwort! ❌';
+      this.message = 'Falsches Passwort oder E-Mail-Adresse! ❌';
     }
   }
 }

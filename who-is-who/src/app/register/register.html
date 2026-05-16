@@ -2,8 +2,18 @@
   <h2>Account erstellen</h2>
 
   <div class="field">
-    <label>E-Mail</label>
-    <input type="email" [(ngModel)]="email" placeholder="beispiel@htl-donaustadt.at">
+    <label>Vorname</label>
+    <input type="text" [(ngModel)]="vorname" placeholder="z.B. Max">
+  </div>
+
+  <div class="field">
+    <label>Nachname</label>
+    <input type="text" [(ngModel)]="nachname" placeholder="z.B. Mustermann">
+  </div>
+
+  <div class="field">
+    <label>E-Mail-Adresse</label>
+    <input type="email" [(ngModel)]="email" placeholder="max.mustermann@htl.at">
   </div>
 
   <div class="field">

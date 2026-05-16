@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-profile-setup',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './profile-setup.html'
+  templateUrl: './profile-setup.html',
+  styleUrl: './profile-setup.css'
 })
 export class ProfileSetupComponent implements OnInit {
   role = '';
@@ -17,12 +18,16 @@ export class ProfileSetupComponent implements OnInit {
   bio = '';
 
   ngOnInit() {
-    // Rolle von der vorherigen Seite laden
     this.role = localStorage.getItem('userRole') || 'schueler';
+    this.vorname = localStorage.getItem('registeredVorname') || '';
+    this.nachname = localStorage.getItem('registeredNachname') || '';
   }
 
   saveProfile() {
-    alert('Profil für ' + this.vorname + ' wurde gespeichert!');
-    // Hier könnte man später zur Liste aller Personen weiterleiten
+    if (this.role === 'schueler' && !this.klasse.trim()) {
+      alert('Bitte trage deine Klasse ein.');
+      return;
+    }
+    alert('Profil für ' + this.vorname + ' ' + this.nachname + ' wurde gespeichert!');
   }
 }

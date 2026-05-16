@@ -1,21 +1,33 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ProfileSetupComponent } from './profile-setup'; // Hier auf ...Component geändert
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
-describe('ProfileSetupComponent', () => {
-  let component: ProfileSetupComponent;
-  let fixture: ComponentFixture<ProfileSetupComponent>;
+@Component({
+  selector: 'app-profile-setup',
+  standalone: true,
+  imports: [FormsModule, CommonModule],
+  templateUrl: './profile-setup.html',
+  styleUrl: './profile-setup.css'
+})
+export class ProfileSetupComponent implements OnInit {
+  role = '';
+  vorname = '';
+  nachname = '';
+  klasse = '';
+  fach = '';
+  bio = '';
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ProfileSetupComponent], // Auch hier angepasst
-    }).compileComponents();
+  ngOnInit() {
+    this.role = localStorage.getItem('userRole') || 'schueler';
+    this.vorname = localStorage.getItem('registeredVorname') || '';
+    this.nachname = localStorage.getItem('registeredNachname') || '';
+  }
 
-    fixture = TestBed.createComponent(ProfileSetupComponent);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  saveProfile() {
+    if (this.role === 'schueler' && !this.klasse.trim()) {
+      alert('Bitte trage deine Klasse ein.');
+      return;
+    }
+    alert('Profil für ' + this.vorname + ' ' + this.nachname + ' wurde gespeichert!');
+  }
+}
