@@ -11,6 +11,8 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 20px;
   margin-bottom: 45px;
+  position: relative;
+  z-index: 50;
 }
 
 h2 {
@@ -18,10 +20,6 @@ h2 {
   font-size: 2.2rem;
   font-weight: 600;
   letter-spacing: -0.5px;
-}
-
-.profile-menu-container {
-  position: relative;
 }
 
 .avatar-menu-btn {
@@ -51,6 +49,7 @@ h2 {
   right: 0;
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 8px;
@@ -94,12 +93,6 @@ h2 {
   color: #f87171;
 }
 
-.dropdown-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  margin: 6px 0;
-}
-
 .search-container {
   display: flex;
   justify-content: center;
@@ -135,6 +128,7 @@ h2 {
 .profile-card {
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 30px 24px;
   text-align: center;
@@ -194,8 +188,8 @@ h2 {
   margin-bottom: 20px;
 }
 
-.schueler .badge { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-.lehrer .badge { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.profile-card .badge.schueler { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.profile-card .badge.lehrer { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
 
 .info-text {
   font-size: 0.9rem;
@@ -207,18 +201,187 @@ h2 {
   color: #cbd5e1;
 }
 
-.bio {
-  font-style: italic;
-  color: #64748b;
-  margin-top: 20px;
-  font-size: 0.85rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.08);
-  padding-top: 15px;
-}
-
 .no-results {
   text-align: center;
   padding: 50px;
   color: #64748b;
   font-size: 1.1rem;
+}
+
+/* --- MODAL-OVERLAY SYSTEM --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 6, 23, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: modalFadeIn 0.3s ease forwards;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-container {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 50px rgba(56, 189, 248, 0.15);
+  border-radius: 24px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) ease-out;
+  color: #fff;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal-back-btn {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  z-index: 10001;
+}
+
+.modal-back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.modal-header {
+  padding: 50px 30px 25px 30px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.avatar-container-large {
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 20px auto;
+}
+
+.avatar-large {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.avatar-placeholder-large {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  font-size: 3rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.modal-header h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.modal-header .badge {
+  font-size: 0.85rem;
+  padding: 6px 16px;
+  margin-bottom: 0;
+}
+.modal-header .badge.schueler { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.modal-header .badge.lehrer { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+
+.modal-body {
+  padding: 30px 40px 40px 40px;
+}
+
+.info-row {
+  display: flex;
+  gap: 20px;
+}
+
+.info-group {
+  margin-bottom: 22px;
+  flex: 1;
+}
+
+.info-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.info-group p {
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.info-group p.highlight {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.bio-section {
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.bio-section label {
+  color: #38bdf8;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.bio-text {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  margin-top: -10px;
+  margin-bottom: 20px;
 }

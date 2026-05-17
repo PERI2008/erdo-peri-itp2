@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -15,12 +15,15 @@ export class ProfileListComponent implements OnInit {
   private firestore = inject(Firestore);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
 
   profiles: any[] = [];
   filteredProfiles: any[] = [];
   searchTerm: string = '';
 
   isDropdownOpen = false;
+  isModalOpen = false;
+  selectedProfile: any = null;
 
   async ngOnInit() {
     await this.loadProfiles();
@@ -34,7 +37,6 @@ export class ProfileListComponent implements OnInit {
         ...doc.data()
       }));
 
-      // Startet sauber und leer (Profile kommen erst bei Suche)
       this.filteredProfiles = [];
       this.cdr.detectChanges();
     } catch (error) {
@@ -42,9 +44,22 @@ export class ProfileListComponent implements OnInit {
     }
   }
 
+  openModal(profile: any) {
+    this.selectedProfile = profile;
+    this.isModalOpen = true;
+    this.cdr.detectChanges();
+  }
+
+  closeModal() {
+    this.ngZone.run(() => {
+      this.isModalOpen = false;
+      this.selectedProfile = null;
+      this.cdr.detectChanges();
+    });
+  }
+
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
-    // FIX: Erzwingt das sofortige Aufklappen des Menüs ohne Refresh-Zwang!
     this.cdr.detectChanges();
   }
 

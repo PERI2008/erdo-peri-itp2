@@ -12,7 +12,6 @@
         <div class="dropdown-item" (click)="goToProfileSetup()">
           ⚙️ Profil bearbeiten
         </div>
-        <div class="dropdown-divider"></div>
         <div class="dropdown-item logout-item" (click)="logout()">
           🚪 Abmelden
         </div>
@@ -31,12 +30,12 @@
   </div>
 
   <div class="profile-grid">
-    <div *ngFor="let profile of filteredProfiles" class="profile-card" [ngClass]="profile.role">
+    <div *ngFor="let profile of filteredProfiles" class="profile-card" [ngClass]="profile.role" (click)="openModal(profile)" style="cursor: pointer;">
 
       <div class="avatar-container">
         <img *ngIf="profile.profilbild" [src]="profile.profilbild" alt="Profilbild" class="avatar" />
         <div *ngIf="!profile.profilbild" class="avatar-placeholder">
-          {{ profile.vorname?.[0] }}{{ profile.nachname?.[0] }}
+          {{ profile.vorname[0] }}{{ profile.nachname[0] }}
         </div>
       </div>
 
@@ -51,12 +50,78 @@
         <strong>Fach:</strong> {{ profile.fach }} <br />
         <strong>Raum:</strong> {{ profile.raum }}
       </p>
-
-      <p class="bio" *ngIf="profile.bio">"{{ profile.bio }}"</p>
     </div>
   </div>
 
-  <div *ngIf="filteredProfiles.length === 0" class="no-results">
+  <div *ngIf="searchTerm && filteredProfiles.length === 0" class="no-results">
     Keine Profile gefunden. 🔍
+  </div>
+
+</div>
+
+
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+
+  <div class="modal-container" (click)="$event.stopPropagation()">
+
+    <button class="modal-back-btn" (click)="closeModal()">
+      ← Zurück
+    </button>
+
+    <div class="modal-content" *ngIf="selectedProfile">
+
+      <div class="modal-header">
+        <div class="avatar-container-large">
+          <img *ngIf="selectedProfile.profilbild" [src]="selectedProfile.profilbild" alt="Profilbild" class="avatar-large" />
+          <div *ngIf="!selectedProfile.profilbild" class="avatar-placeholder-large">
+            {{ selectedProfile.vorname[0] }}{{ selectedProfile.nachname[0] }}
+          </div>
+        </div>
+        <h3>{{ selectedProfile.vorname }} {{ selectedProfile.nachname }}</h3>
+        <span class="badge" [ngClass]="selectedProfile.role">{{ selectedProfile.role === 'schueler' ? 'Schüler/in' : 'Lehrkraft' }}</span>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="info-group">
+          <label>E-Mail-Adresse</label>
+          <p>{{ selectedProfile.email }}</p>
+        </div>
+
+        <div *ngIf="selectedProfile.role === 'schueler'">
+          <div class="info-row">
+            <div class="info-group">
+              <label>Klasse</label>
+              <p class="highlight">{{ selectedProfile.klasse }}</p>
+            </div>
+            <div class="info-group">
+              <label>Geburtsdatum</label>
+              <p>{{ selectedProfile.geburtsdatum | date:'dd.MM.yyyy' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="selectedProfile.role === 'lehrer'">
+          <div class="info-row">
+            <div class="info-group">
+              <label>Unterrichtsfach</label>
+              <p class="highlight">{{ selectedProfile.fach }}</p>
+            </div>
+            <div class="info-group">
+              <label>Stammraum</label>
+              <p class="highlight">{{ selectedProfile.raum }}</p>
+            </div>
+          </div>
+          <div class="form-checkbox" *ngIf="selectedProfile.istKlassenvorstand">
+            <span class="kv-icon">👑</span> <strong>Ich bin Klassenvorstand</strong>
+          </div>
+        </div>
+
+        <div class="bio-section" *ngIf="selectedProfile.bio">
+          <label>Biografie / Über mich</label>
+          <p class="bio-text">"{{ selectedProfile.bio }}"</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
