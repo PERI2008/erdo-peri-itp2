@@ -1,0 +1,43 @@
+<div class="container">
+  <h2>Who is Who - Profile</h2>
+
+  <div class="search-container">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterProfiles()"
+      placeholder="Nach Name, Klasse oder Fach suchen..."
+      class="search-input"
+    />
+  </div>
+
+  <div class="profile-grid">
+    <div *ngFor="let profile of filteredProfiles" class="profile-card" [ngClass]="profile.role">
+
+      <div class="avatar-container">
+        <img *ngIf="profile.profilbild" [src]="profile.profilbild" alt="Profilbild" class="avatar" />
+        <div *ngIf="!profile.profilbild" class="avatar-placeholder">
+          {{ profile.vorname?.[0] }}{{ profile.nachname?.[0] }}
+        </div>
+      </div>
+
+      <h3>{{ profile.vorname }} {{ profile.nachname }}</h3>
+      <span class="badge">{{ profile.role === 'schueler' ? 'Schüler' : 'Lehrer' }}</span>
+
+      <p class="info-text" *ngIf="profile.role === 'schueler'">
+        <strong>Klasse:</strong> {{ profile.klasse }}
+      </p>
+
+      <p class="info-text" *ngIf="profile.role === 'lehrer'">
+        <strong>Fach:</strong> {{ profile.fach }} <br />
+        <strong>Raum:</strong> {{ profile.raum }}
+      </p>
+
+      <p class="bio" *ngIf="profile.bio">"{{ profile.bio }}"</p>
+    </div>
+  </div>
+
+  <div *ngIf="filteredProfiles.length === 0" class="no-results">
+    Keine Profile gefunden. 🔍
+  </div>
+</div>
