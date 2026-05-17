@@ -1,33 +1,53 @@
-<div class="register-box">
-  <h2>Account erstellen</h2>
+<div class="register-wrapper">
 
-  <div class="field">
-    <label>Vorname</label>
-    <input type="text" [(ngModel)]="vorname" placeholder="z.B. Max">
+  <div *ngIf="notificationMessage" class="toast" [ngClass]="notificationType">
+    <span class="toast-icon">{{ notificationType === 'success' ? '✅' : '❌' }}</span>
+    <span class="toast-text">{{ notificationMessage }}</span>
   </div>
 
-  <div class="field">
-    <label>Nachname</label>
-    <input type="text" [(ngModel)]="nachname" placeholder="z.B. Mustermann">
-  </div>
+  <div class="register-card">
+    <h2>Konto erstellen</h2>
+    <p class="subtitle">Registriere dich für das HTL Who-is-Who</p>
 
-  <div class="field">
-    <label>E-Mail-Adresse</label>
-    <input type="email" [(ngModel)]="email" placeholder="max.mustermann@htl.at">
-  </div>
+    <form (ngSubmit)="goToStepTwo()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Vorname</label>
+          <input type="text" [(ngModel)]="vorname" name="vorname" required />
+        </div>
+        <div class="form-group">
+          <label>Nachname</label>
+          <input type="text" [(ngModel)]="nachname" name="nachname" required />
+        </div>
+      </div>
 
-  <div class="field">
-    <label>Passwort</label>
-    <input type="password" [(ngModel)]="password" placeholder="Passwort wählen">
-  </div>
+      <div class="form-group">
+        <label>E-Mail-Adresse</label>
+        <input type="email" [(ngModel)]="email" name="email" required />
+      </div>
 
-  <div class="field">
-    <label>Ich bin:</label>
-    <select [(ngModel)]="role">
-      <option value="schueler">Schüler/in</option>
-      <option value="lehrer">Lehrer/in</option>
-    </select>
-  </div>
+      <div class="form-group">
+        <label>Passwort</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required />
+      </div>
 
-  <button (click)="goToStepTwo()">Weiter zum Profil</button>
+      <div class="form-group">
+        <label>Ich bin...</label>
+        <div class="role-selection">
+          <button type="button" class="role-btn" [class.active]="role === 'schueler'" (click)="role = 'schueler'">
+            👨‍🎓 Schüler
+          </button>
+          <button type="button" class="role-btn" [class.active]="role === 'lehrer'" (click)="role = 'lehrer'">
+            👨‍🏫 Lehrer
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Weiter zum Profil-Setup</button>
+    </form>
+
+    <div class="login-footer">
+      <p>Bereits ein Konto? <span class="register-link" (click)="goToLogin()">Hier anmelden</span></p>
+    </div>
+  </div>
 </div>

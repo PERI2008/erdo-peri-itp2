@@ -1,58 +1,61 @@
-<div class="register-box">
-  <h2>Profil vervollständigen</h2>
-  <p>Willkommen, <strong>{{ vorname }} {{ nachname }}</strong>!</p>
-  <p>Du bist als <strong>{{ role === 'schueler' ? 'Schüler/in' : 'Lehrer/in' }}</strong> registriert.</p>
+<div class="setup-wrapper">
 
-  <hr>
+  <div *ngIf="notificationMessage" class="toast" [ngClass]="notificationType">
+    <span class="toast-icon">{{ notificationType === 'success' ? '✅' : '❌' }}</span>
+    <span class="toast-text">{{ notificationMessage }}</span>
+  </div>
 
-  <div class="field">
-    <label>Profilbild hochladen</label>
-    <input type="file" (change)="onFileSelected($event)" accept="image/*">
+  <div class="setup-card">
+    <h2>{{ isEditMode ? 'Profil bearbeiten' : 'Profil vervollständigen' }}</h2>
+    <p class="subtitle">{{ isEditMode ? 'Aktualisiere hier deine Systemdaten' : 'Hallo ' + vorname + ', richte dein Profil ein' }}</p>
 
-    @if (profilbild) {
-      <div style="margin-top: 10px;">
-        <img [src]="profilbild" alt="Vorschau" style="max-width: 120px; max-height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc;">
+    <form (ngSubmit)="saveProfile()">
+
+      <div class="avatar-upload-section">
+        <div class="avatar-preview">
+          <img *ngIf="profilbild" [src]="profilbild" alt="Vorschau" />
+          <span *ngIf="!profilbild" class="avatar-initials">{{ vorname[0] }}{{ nachname[0] }}</span>
+        </div>
+        <label for="file-input" class="file-label">Bild ändern</label>
+        <input type="file" id="file-input" (change)="onFileSelected($event)" accept="image/*" />
       </div>
-    }
+
+      <div *ngIf="role === 'schueler'" class="dynamic-fields">
+        <div class="form-group">
+          <label>Klasse</label>
+          <input type="text" [(ngModel)]="klasse" name="klasse" placeholder="z.B. 4AHITM" required />
+        </div>
+        <div class="form-group">
+          <label>Geburtsdatum</label>
+          <input type="date" [(ngModel)]="geburtsdatum" name="geburtsdatum" required />
+        </div>
+      </div>
+
+      <div *ngIf="role === 'lehrer'" class="dynamic-fields">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Hauptfach</label>
+            <input type="text" [(ngModel)]="fach" name="fach" placeholder="z.B. INSY" required />
+          </div>
+          <div class="form-group">
+            <label>Stammraum</label>
+            <input type="text" [(ngModel)]="raum" name="raum" placeholder="z.B. C3.04" required />
+          </div>
+        </div>
+        <div class="form-checkbox">
+          <input type="checkbox" id="kv" [(ngModel)]="istKlassenvorstand" name="istKlassenvorstand" />
+          <label for="kv">Ich bin Klassenvorstand</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Über mich (Biografie)</label>
+        <textarea [(ngModel)]="bio" name="bio" rows="3" placeholder="Schreibe etwas über dich..."></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        {{ isEditMode ? 'Änderungen speichern' : 'Profil aktivieren' }}
+      </button>
+    </form>
   </div>
-
-  <hr>
-
-  @if (role === 'schueler') {
-    <div class="field">
-      <label>Klasse (z.B. 4AHITM)</label>
-      <input type="text" [(ngModel)]="klasse" placeholder="Klasse">
-    </div>
-
-    <div class="field">
-      <label>Geburtsdatum</label>
-      <input type="date" [(ngModel)]="geburtsdatum">
-    </div>
-  }
-
-  @else {
-    <div class="field">
-      <label>Unterrichtsfach (z.B. ITP)</label>
-      <input type="text" [(ngModel)]="fach" placeholder="Fach">
-    </div>
-
-    <div class="field">
-      <label>Raum (z.B. C3.04)</label>
-      <input type="text" [(ngModel)]="raum" placeholder="Raum">
-    </div>
-
-    <div class="field checkbox-field">
-      <label>
-        <input type="checkbox" [(ngModel)]="istKlassenvorstand">
-        Ich bin Klassenvorstand
-      </label>
-    </div>
-  }
-
-  <div class="field">
-    <label>Über mich (Bio)</label>
-    <textarea [(ngModel)]="bio" placeholder="Erzähle etwas über dich..."></textarea>
-  </div>
-
-  <button (click)="saveProfile()">Profil speichern</button>
 </div>
