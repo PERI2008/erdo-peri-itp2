@@ -1,1 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+/* Globale CSS-Resets für das Cinematic-Erlebnis */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(-45deg, #020617, #071e3d, #0b2545, #134074, #020617);
+  background-size: 400% 400%;
+  animation: ps5AmbientWave 18s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  color: #f8fafc;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Der lebendige, flüssige PlayStation-Hintergrundeffekt */
+@keyframes ps5AmbientWave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Custom Scrollbar für die Profil-Liste (dezent und modern) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(2, 6, 23, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

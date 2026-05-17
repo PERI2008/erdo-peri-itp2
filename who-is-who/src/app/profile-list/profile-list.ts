@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 
 @Component({
@@ -12,16 +13,19 @@ import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 })
 export class ProfileListComponent implements OnInit {
   private firestore = inject(Firestore);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
-  profiles: any[] = [];         // Hier landen alle Profile aus der Cloud
-  filteredProfiles: any[] = []; // Diese Liste zeigen wir an (wird gefiltert)
-  searchTerm: string = '';      // Das Suchfeld
+  profiles: any[] = [];
+  filteredProfiles: any[] = [];
+  searchTerm: string = '';
+
+  isDropdownOpen = false;
 
   async ngOnInit() {
     await this.loadProfiles();
   }
 
-  // Holt alle Profile live aus Firestore
   async loadProfiles() {
     try {
       const querySnapshot = await getDocs(collection(this.firestore, 'profile'));
@@ -30,20 +34,37 @@ export class ProfileListComponent implements OnInit {
         ...doc.data()
       }));
 
-      // Am Anfang sind gefilterte Profile = alle Profile
-      this.filteredProfiles = [...this.profiles];
-      console.log('Profile erfolgreich aus Firestore geladen:', this.profiles);
+      // Startet sauber und leer (Profile kommen erst bei Suche)
+      this.filteredProfiles = [];
+      this.cdr.detectChanges();
     } catch (error) {
       console.error('Fehler beim Laden der Profile:', error);
     }
   }
 
-  // Filtert die Liste in Echtzeit nach Vorname, Nachname oder Klasse/Fach
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    // FIX: Erzwingt das sofortige Aufklappen des Menüs ohne Refresh-Zwang!
+    this.cdr.detectChanges();
+  }
+
+  goToProfileSetup() {
+    this.isDropdownOpen = false;
+    this.router.navigate(['/profile-setup']);
+  }
+
+  logout() {
+    this.isDropdownOpen = false;
+    localStorage.removeItem('currentUserEmail');
+    localStorage.removeItem('savedProfile');
+    this.router.navigate(['/']);
+  }
+
   filterProfiles() {
     const term = this.searchTerm.toLowerCase().trim();
 
     if (!term) {
-      this.filteredProfiles = [...this.profiles];
+      this.filteredProfiles = [];
       return;
     }
 

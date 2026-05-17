@@ -1,19 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ProfileListComponent } from './profile-list'; // Name korrigiert
+import { Firestore } from '@angular/fire/firestore'; // Import für den Datenbank-Dummy
 
-import { ProfileList } from './profile-list';
-
-describe('ProfileList', () => {
-  let component: ProfileList;
-  let fixture: ComponentFixture<ProfileList>;
+describe('ProfileListComponent', () => {
+  let component: ProfileListComponent;
+  let fixture: ComponentFixture<ProfileListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProfileList],
+      imports: [ProfileListComponent],
+      providers: [
+        { provide: Firestore, useValue: {} } // Liefert einen Dummy, damit der Test nicht abstürzt
+      ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ProfileList);
+    fixture = TestBed.createComponent(ProfileListComponent);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

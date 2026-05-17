@@ -1,5 +1,24 @@
 <div class="container">
-  <h2>Who is Who - Profile</h2>
+
+  <div class="top-bar">
+    <h2>Who is Who - Profile</h2>
+
+    <div class="profile-menu-container">
+      <button class="avatar-menu-btn" (click)="toggleDropdown()">
+        <span class="user-icon">👤</span> Account
+      </button>
+
+      <div class="dropdown-menu" [class.show]="isDropdownOpen">
+        <div class="dropdown-item" (click)="goToProfileSetup()">
+          ⚙️ Profil bearbeiten
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item logout-item" (click)="logout()">
+          🚪 Abmelden
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="search-container">
     <input

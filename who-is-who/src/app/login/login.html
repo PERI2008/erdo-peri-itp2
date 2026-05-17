@@ -1,19 +1,53 @@
-<div class="login-box">
-  <h2>Anmeldung</h2>
+<div class="login-wrapper">
 
-  <div class="field">
-    <label>E-Mail-Adresse</label>
-    <input type="email" [(ngModel)]="email" placeholder="z.B. max.mustermann@htl.at">
+  <div *ngIf="notificationMessage" class="toast" [ngClass]="notificationType">
+    <span class="toast-icon">{{ notificationType === 'success' ? '✅' : '❌' }}</span>
+    <span class="toast-text">{{ notificationMessage }}</span>
   </div>
 
-  <div class="field">
-    <label>Passwort</label>
-    <input type="password" [(ngModel)]="password" placeholder="Passwort">
+  <div class="login-card">
+    <h2>Anmeldung</h2>
+    <p class="subtitle">Willkommen zurück beim HTL Who-is-Who</p>
+
+    <form (ngSubmit)="login()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Vorname</label>
+          <input type="text" [(ngModel)]="vorname" name="vorname" required />
+        </div>
+        <div class="form-group">
+          <label>Nachname</label>
+          <input type="text" [(ngModel)]="nachname" name="nachname" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>E-Mail-Adresse</label>
+        <input type="email" [(ngModel)]="email" name="email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Passwort</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required />
+      </div>
+
+      <div class="form-group">
+        <label>Ich bin...</label>
+        <div class="role-selection">
+          <button type="button" class="role-btn" [class.active]="role === 'schueler'" (click)="role = 'schueler'">
+            👨‍🎓 Schüler
+          </button>
+          <button type="button" class="role-btn" [class.active]="role === 'lehrer'" (click)="role = 'lehrer'">
+            👨‍🏫 Lehrer
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">Einloggen</button>
+    </form>
+
+    <div class="login-footer">
+      <p>Noch kein Konto? <span class="register-link" (click)="goToRegister()">Jetzt registrieren</span></p>
+    </div>
   </div>
-
-  <button (click)="checkLogin()">Einloggen</button>
-
-  <p *ngIf="message" [class.success]="message.includes('erfolgreich')" [class.error]="!message.includes('erfolgreich')">
-    {{ message }}
-  </p>
 </div>
